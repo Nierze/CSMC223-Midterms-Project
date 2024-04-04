@@ -57,7 +57,7 @@ MOV NIR 4<br>
 PUT RC1 97<br>
 
 
-![Diagram](./instructionSet.png)
+![Diagram](./asssets/instructionSet.png)
 
 Result:
 Value of 97 will become 377
