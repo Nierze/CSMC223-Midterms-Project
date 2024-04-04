@@ -1,7 +1,5 @@
-#include "libraries.hpp"
-#include "components.hpp"
-#include <iostream>
-#include <string>
+#include "../libraries/libraries.hpp"
+#include "../libraries/components.hpp"
 using namespace std;
 
 map<string, Register*> registerMap {

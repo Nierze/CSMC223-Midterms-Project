@@ -2,6 +2,6 @@
 #define COMPONENTS_HPP
 
 #include "parse.hpp"
-#include "registersTemplate.hpp"
+#include "../hardware/registersTemplate.hpp"
 
 #endif // COMPONENTS_HPP

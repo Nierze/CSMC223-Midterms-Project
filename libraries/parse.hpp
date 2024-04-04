@@ -25,9 +25,14 @@ inline vector<vector<string>> parseFile(const string& filename) {
 
 
 
-inline vector<string> parseLine() {
-    string filename = "/path/to/your/file.txt";
-    vector<vector<string>> data = parseFile(filename);
+inline vector<string> parseLine(string fileName) {
+    vector<string> data;
+    ifstream file(fileName);
+    string line;
+
+    while (getline(file, line)) {
+        data.push_back(line);
+    }
 
     return data;
 }
