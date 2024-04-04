@@ -8,4 +8,5 @@
 #include <iomanip>
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
 #include <cassert>
