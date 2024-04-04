@@ -9,5 +9,3 @@
 #include <ctime>
 #include <cstdlib>
 #include <cassert>
-#include "parse.cpp"
-using namespace std;

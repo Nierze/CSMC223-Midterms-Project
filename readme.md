@@ -35,8 +35,9 @@ XXX = **A little surprise**.
 ### Other Registers
 | Register | Purpose | Meaning |
 |----------|---------|--------|
-|   CIN   | Holds the current instruction   | **C**urrent **IN**struction |
-|   NIG   | Holds the address of the next instruction    | **N**ext **I**nstruction **G**etter|
+|   CIR   | Holds the current instruction   | **C**urrent **I**struction **R**egister|
+|   NIR   | Holds the address of the next instruction    | **N**ext **I**nstruction **R**egister|
+
 <!-- |   CIA   | Holds the address of the current instruction   | **C**urrent **I**nstruction **A**ddress |
 -->
 
@@ -51,8 +52,8 @@ MOV RC2 96<br>
 MOV RC3 #RC1<br>
 ADD RC1 RC2<br>
 ADD RC1 RC3<br>
-MOV NIG 4<br>
-MOV NIG 4<br>
+MOV NIR 4<br>
+MOV NIR 4<br>
 PUT RC1 97<br>
 
 
