@@ -3,6 +3,7 @@
 #define MEMORY_CLASS_H
 
 #include "../libraries/libraries.hpp"
+#include <string>
 using namespace std;
 class MemoryClass {
 public:
@@ -31,6 +32,10 @@ public:
 
     int getMaxMemoryAmount() {
         return maxMemoryAmount;
+    }
+    
+    map<int, string> getMemoryMap() {
+        return memoryMap;
     }
 
 private:

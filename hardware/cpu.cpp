@@ -2,6 +2,10 @@
 #include "../libraries/components.hpp"
 using namespace std;
 
+MemoryClass memory(64);
+
+
+
 map<string, Register*> registerMap {
     {"RA1", new Register(0, "64", "RA1")},
     {"RB1", new Register(0, "32", "RB1")},
@@ -23,29 +27,33 @@ map<string, Register*> registerMap {
     {"NIR", new Register(0, "1", "NIR")}
 };
 
-void interpretLine(vector<vector<string>> instructions) {
-    for (vector<string> line : instructions) {
-        for (int i = 0; i < line.size(); i++) {
-            string token = line[i];
-            if (token == "MOV") {
-                registerMap[line[i+1]]->setData(registerMap[line[i+2]]->getData());
-            }
-            else if (token == "PUT") {
+// void interpretLine(vector<vector<string>> instructions) {
+//     for (vector<string> line : instructions) {
+//         for (int i = 0; i < line.size(); i++) {
+//             string token = line[i];
+//             if (token == "MOV") {
+//                 registerMap[line[i+1]]->setData(registerMap[line[i+2]]->getData());
+//             }
+//             else if (token == "PUT") {
                 
-            }
-        }
-    }
-}
-void startSystem() {
-    string inputFileName;
-    vector<vector<string>> data;
+//             }
+//         }
+//     }
+// }
+void startSystem(string inputFileName) {
+
     cout << "Starting system..." << endl;
     cout << "System started." << endl;
 
     cout << "Enter name of input file: " << endl;
-    cin >> inputFileName;
+    memory.placeStringsInMemory(parseFile(inputFileName));
+    cout << "Memory Contents:" << endl;
+    for (const auto& pair : memory.getMemoryMap()) {
+        cout << pair.first << ": " << pair.second << endl;
+    }
 
-    data = parseFile(inputFileName);
+    
+
     
 
 
