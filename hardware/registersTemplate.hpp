@@ -10,10 +10,11 @@ public:
         registerName = "";
     }
 
-    Register(int data, string bitAmount, string registerName) {
+    Register(int data, string bitAmount, string registerName, int address) {
         this->data = data;
         this->bitAmount = bitAmount;
         this->registerName = registerName;
+        this->address = address;
     }
 
     // Destructor
@@ -59,119 +60,120 @@ private:
     int data;
     string bitAmount;
     string registerName;
+    int address;
 };
 
 
 
-class Register64 : public Register {
-public:
-    // Constructor
-    Register64() : Register(0, "64", "Register64") {
-    }
+// class Register64 : public Register {
+// public:
+//     // Constructor
+//     Register64() : Register(0, "64", "Register64") {
+//     }
 
-    Register64(string name) : Register(0, "64", name) {
-    }
+//     Register64(string name) : Register(0, "64", name) {
+//     }
 
-    // Destructor
-    ~Register64() {
-    }
-};
+//     // Destructor
+//     ~Register64() {
+//     }
+// };
 
-class Register32 : public Register {
-public:
-    // Constructor
-    Register32() : Register(0, "32", "Register32") {
-    }
+// class Register32 : public Register {
+// public:
+//     // Constructor
+//     Register32() : Register(0, "32", "Register32") {
+//     }
 
-    Register32(string name) : Register(0, "32", name) {
-    }
+//     Register32(string name) : Register(0, "32", name) {
+//     }
 
-    Register32(int data, string name) : Register(0, "32", name) {
-    }
+//     Register32(int data, string name) : Register(0, "32", name) {
+//     }
 
-    // Destructor
-    ~Register32() {
-    }
-};
+//     // Destructor
+//     ~Register32() {
+//     }
+// };
 
-class Register16 : public Register {
-public:
-    // Constructor
-    Register16() : Register(0, "16", "Register16") {
-    }
+// class Register16 : public Register {
+// public:
+//     // Constructor
+//     Register16() : Register(0, "16", "Register16") {
+//     }
 
-    Register16(string name) : Register(0, "16", name) {
-    }
+//     Register16(string name) : Register(0, "16", name) {
+//     }
 
-    Register16(int data, string name) : Register(data, "16", name) {
-    }
+//     Register16(int data, string name) : Register(data, "16", name) {
+//     }
 
-    // Destructor
-    ~Register16() {
-    }
-};
+//     // Destructor
+//     ~Register16() {
+//     }
+// };
 
 
-class Register8 : public Register {
-public:
-    // Constructor
-    Register8() : Register(0, "8", "Register8") {
-    }
+// class Register8 : public Register {
+// public:
+//     // Constructor
+//     Register8() : Register(0, "8", "Register8") {
+//     }
 
-    Register8(string name) : Register(0, "8", name) {
-    }
+//     Register8(string name) : Register(0, "8", name) {
+//     }
 
-    // Destructor
-    ~Register8() {
-    }
-};
+//     // Destructor
+//     ~Register8() {
+//     }
+// };
 
-class RegisterSpecial {
-public:
-    RegisterSpecial() {
-        data = 0;
-        registerName = "RegisterSpecial";
-    }
+// class RegisterSpecial {
+// public:
+//     RegisterSpecial() {
+//         data = 0;
+//         registerName = "RegisterSpecial";
+//     }
 
-    RegisterSpecial(int data, const string& registerName) {
-        this->data = data;
-        this->registerName = registerName;
-    }   
+//     RegisterSpecial(int data, const string& registerName) {
+//         this->data = data;
+//         this->registerName = registerName;
+//     }   
 
-    RegisterSpecial(const string& registerName) {
-        data = 0;
-        this->registerName = registerName;
-    }  
+//     RegisterSpecial(const string& registerName) {
+//         data = 0;
+//         this->registerName = registerName;
+//     }  
 
-    int getData() const {
-        return data;
-    }   
+//     int getData() const {
+//         return data;
+//     }   
 
-    void setData(int newData) {
-        data = newData;
-    }
+//     void setData(int newData) {
+//         data = newData;
+//     }
 
-    string getRegisterName() const {
-        return registerName;
-    }
+//     string getRegisterName() const {
+//         return registerName;
+//     }
 
-    void setRegisterName(const string& newRegisterName) {
-        registerName = newRegisterName;
-    }
+//     void setRegisterName(const string& newRegisterName) {
+//         registerName = newRegisterName;
+//     }
 
-    int getBitAmount() const {
-        return bitAmount;
-    }
+//     int getBitAmount() const {
+//         return bitAmount;
+//     }
 
-    void setBitAmount(int newBitAmount) {
-        bitAmount = newBitAmount;
-    }
+//     void setBitAmount(int newBitAmount) {
+//         bitAmount = newBitAmount;
+//     }
     
-private:
-    int data;
-    int bitAmount = 8;
-    string registerName;
-};
+// private:
+//     int data;
+//     int bitAmount = 8;
+//     string registerName;
+// };
 
 
 
