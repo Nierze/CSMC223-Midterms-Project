@@ -23,6 +23,7 @@ using namespace std;
 //     return result;
 // }
 
+inline int hexToDecimal(string);
 inline string decimalToHex(int);
 inline string convertToNum(string);
 inline string lineToNum(string);
@@ -42,25 +43,26 @@ inline vector<string> parseFile(string fileName) {
 }
 
 inline string convertToNum(string str) {
+    char end = '0';
     string result;
     if (str == "MOV") {
-        result = "00";
-    } else if (str == "PUT") {
         result = "01";
-    } else if (str == "PRN") {
+    } else if (str == "PUT") {
         result = "02";
-    } else if (str == "OBL") {
+    } else if (str == "PRN") {
         result = "03";
+    } else if (str == "OBL") {
+        result = "04";
     } else if (str == "ADD") {
-        result = "10";
-    } else if (str == "SUB") {
         result = "11";
-    } else if (str == "DIV") {
+    } else if (str == "SUB") {
         result = "12";
-    } else if (str == "MUL") {
+    } else if (str == "DIV") {
         result = "13";
-    } else if (str == "MOD") {
+    } else if (str == "MUL") {
         result = "14";
+    } else if (str == "MOD") {
+        result = "15";
     } else if (str == "GTN") {
         result = "21";
     } else if (str == "LTN") {
@@ -109,9 +111,11 @@ inline string convertToNum(string str) {
         result = "83";
     } else if (str == "RD4") {
         result = "82";
-    } else if (str.at(0) == '[') {
-        // Remove the square brackets from the string
-        str = str.substr(1, str.length() - 2);
+    } else  {
+        if (str.at(0) == '[') {
+            str = str.substr(1, str.length() - 2);
+            end = '1';
+        }
         // Convert the remaining string to an integer
         int num = stoi(str);
         // Convert the integer to a string
@@ -121,8 +125,27 @@ inline string convertToNum(string str) {
         while (result.length() < 4) {
             result = "0" + result;
         }
+        result = ((end == '1') ? "1" : "0") + result;
     }
     return result;
+}
+
+inline int hexToDecimal(string hexStr) {
+    unsigned long decimalValue;  // Use unsigned for correct large number handling
+    stringstream ss;
+
+    ss << hex << hexStr;  // Treat the string as a hexadecimal input stream
+
+    // Use 'strtol' for error checking 
+    char* endptr;  
+    decimalValue = strtol(hexStr.c_str(), &endptr, 16);
+
+    // Error checking:
+    if (*endptr != '\0') {
+        throw invalid_argument("Invalid hexadecimal string");
+    }
+
+    return decimalValue;
 }
 
 inline string decimalToHex(int decimalNum) {
@@ -158,7 +181,7 @@ inline string lineToNum(string str) {
         // Append the number to the output string
         
         if (index == 3) {
-            while (num.length() < 4) {
+            while (num.length() < 5) {
                 num = "0" + num;
             }
         }

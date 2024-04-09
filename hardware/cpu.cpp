@@ -53,12 +53,6 @@ void startSystem(string inputFileName) {
         cout << pair.first << ": " << pair.second << endl;
     }
 
-    
-
-    
-
-
-
 }
 
 
