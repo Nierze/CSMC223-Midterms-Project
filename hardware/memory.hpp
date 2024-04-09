@@ -39,7 +39,12 @@ public:
     }
 
     void insertIntoMemory(int index, string data) {
-        memoryMap.insert(make_pair(index, data));
+        auto it = memoryMap.find(index);
+        if (it != memoryMap.end()) {
+            it->second = data;
+        } else {
+            memoryMap.insert(make_pair(index, data));
+        }
     }
 
 private:

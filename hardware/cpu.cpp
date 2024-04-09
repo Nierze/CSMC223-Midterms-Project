@@ -71,6 +71,7 @@ void startSystem(string inputFileName) {
 
     cout << "RC1: " << registerMap.at("RC1") -> getData() << endl;
     cout << "RA1: " <<registerMap.at("RA1") -> getData() << endl;
+    cout << "RB1: " <<registerMap.at("RB1") -> getData() << endl;
 
 
     cout << "Memory Contents After Execution:" << endl;
@@ -78,7 +79,6 @@ void startSystem(string inputFileName) {
 
 
     for (const auto& pair : memory.getMemoryMap()) {
-        interpretLine(pair.second);
         cout << pair.first << ": " << pair.second << endl;
     }
 }
@@ -88,10 +88,21 @@ void startSystem(string inputFileName) {
 // CPU OPERATIONS
 
 void MOV(string operand, string memoryType, string data) {
+    int index = hexToDecimal(operand);
+    int address = stoi(data.substr(2,3));
+    string regAddress = convertToLetter(data.substr(2,2));
+
        if (memoryType == "0") {
-            registerMap[convertToLetter(operand)] -> 
-            setData(hexToDecimal(memory.getMemory(hexToDecimal(data))));
-        } else {
+            if (address >= 86 && address <= 99) { 
+                registerMap[convertToLetter(operand)] ->
+                setData(registerMap[regAddress] -> getData());
+                
+            } else {
+                registerMap[convertToLetter(operand)] -> 
+            
+                setData(hexToDecimal(memory.getMemory(hexToDecimal(data))));
+            }
+            } else {
             registerMap[convertToLetter(operand)] -> setData(hexToDecimal(data));
         }
 }
@@ -104,26 +115,24 @@ void PUT(string operand, string memoryType, string data) {
     if (memoryType == "0") {
         if (address >= 86 && address <= 99) {
 
-
             memory.insertIntoMemory(index, 
             (dataToMemory(registerMap[convertToLetter(regAddress)] -> getData())));
-
 
         } else {
             memory.insertIntoMemory(index, 
             memory.getMemory(hexToDecimal(data)));
-        }
-
-      
+        }  
     } else {
-        memory.insertIntoMemory(address, to_string(hexToDecimal(data)));
+        memory.insertIntoMemory(index, to_string(hexToDecimal(data)));
     }
+    memory.insertIntoMemory(index, negativeCheck(memory.getMemory(index)));
 }
 
 void ADD(string operand, string memoryType, string data) {
     int operandData = registerMap[convertToLetter(operand)] -> getData();
     string argumentRegister = convertToLetter(data.substr(2,2));
     if (memoryType == "0") {
+
         registerMap[convertToLetter(operand)] -> 
         setData(operandData + 
         registerMap[argumentRegister] -> getData());
@@ -141,6 +150,7 @@ void SUB(string operand, string memoryType, string data) {
         setData(operandData - 
         registerMap[argumentRegister] -> getData());
     } else {
+
         registerMap[convertToLetter(operand)] -> 
         setData(operandData - hexToDecimal(data));
     }

@@ -43,6 +43,7 @@ inline vector<string> parseFile(string fileName) {
 
     return data;
 }
+
 inline string convertToLetter(string str) {
     string result;
 
@@ -113,11 +114,12 @@ inline string convertToLetter(string str) {
     } else if (str == "82") {
         result = "RD4";
     } else {
-        throw invalid_argument("Invalid number string");
+        result = str;
     }
 
     return result;
 }
+
 inline string convertToNum(string str) {
     char end = '0';
     string result;
@@ -207,19 +209,20 @@ inline string convertToNum(string str) {
 }
 
 inline int hexToDecimal(string hexStr) {
+    string str = hexStr.substr(0,9);
     unsigned long decimalValue;  
     stringstream ss;
 
-    ss << hex << hexStr;  
+    ss << hex << str;  
 
     char* endptr;  
-    decimalValue = strtol(hexStr.c_str(), &endptr, 16);
+    decimalValue = strtol(str.c_str(), &endptr, 16);
 
     if (*endptr != '\0') {
         throw invalid_argument("Invalid hexadecimal string");
     }
 
-    return decimalValue;
+    return (hexStr.at(hexStr.length()-1) == '1') ? decimalValue * -1 : decimalValue;
 }
 
 inline string decimalToHex(int decimalNum) {
@@ -229,17 +232,26 @@ inline string decimalToHex(int decimalNum) {
     if (decimalNum == 0) {
         hexStr = "0";
     } else {
+        bool isNegative = false;
+        if (decimalNum < 0) {
+            isNegative = true;
+            decimalNum = -decimalNum;
+        }
+
         while (decimalNum > 0) {
             int remainder = decimalNum % 16;
             hexStr += hexChars[remainder];
             decimalNum /= 16;
         }
         reverse(hexStr.begin(), hexStr.end());
+
+        if (isNegative) {
+            hexStr = "-" + hexStr;
+        }
     }
 
     return hexStr;
 }
-
 
 inline string lineToNum(string str) {
     string output;
@@ -258,10 +270,7 @@ inline string lineToNum(string str) {
         } else {
             num = convertToNum(word);
         }
-        // Convert each word to its corresponding number
-
-        // Append the number to the output string
-
+        
         if (index == 3) {
             while (num.length() < 5) {
                 num = "0" + num;
@@ -271,7 +280,7 @@ inline string lineToNum(string str) {
         index++;
     }
 
-    return output;
+    return output + '0';
 }
 
 inline string dataToMemory(int data) {
@@ -279,6 +288,19 @@ inline string dataToMemory(int data) {
     while (output.length() < 9) {
         output = "0" + output;
     }
+    return output;
+}
+
+inline string negativeCheck(string line) {
+    string output = line;
+    bool isNegative = false;
+    for (auto& c : output) {
+        if (c == '-') {
+            c = '0'; // Replace '-' with '0'
+            isNegative = true;
+        }
+    }
+    output += (isNegative) ? '1' : '0'; // Concatenate '1' to the end of the string
     return output;
 }
 
