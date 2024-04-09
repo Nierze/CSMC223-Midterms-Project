@@ -1,10 +1,20 @@
 #include "../libraries/libraries.hpp"
 #include "../libraries/components.hpp"
+#include <string>
 using namespace std;
 
 MemoryClass memory(64);
 
 
+////////////////////////////////
+// PROTOTYPES
+
+void MOV(string operand, string memoryType, string data);
+void PUT(string operand, string memoryType, string data);
+void ADD(string operand, string memoryType, string data);
+void SUB(string operand, string memoryType, string data);
+void MUL(string operand, string memoryType, string data);
+void DIV(string operand, string memoryType, string data);
 
 map<string, Register*> registerMap {
     {"NIR", new Register(0, "1", "NIR", 99)},
@@ -27,32 +37,139 @@ map<string, Register*> registerMap {
     {"RD4", new Register(0, "8", "RD4", 82)}
 };
 
-
-// void interpretLine(vector<vector<string>> instructions) {
-//     for (vector<string> line : instructions) {
-//         for (int i = 0; i < line.size(); i++) {
-//             string token = line[i];
-//             if (token == "MOV") {
-//                 registerMap[line[i+1]]->setData(registerMap[line[i+2]]->getData());
-//             }
-//             else if (token == "PUT") {
-                
-//             }
-//         }
-//     }
-// }
+  
+void interpretLine(string line) {
+    string opCode = line.substr(0, 2);
+    string operand = line.substr(2, 2);
+    string memoryType = line.substr(4, 1);
+    string data = line.substr(5, 4);
+    if (opCode == "01") {
+        MOV(operand, memoryType, data);
+    } else if (opCode == "02") {
+        PUT(operand, memoryType, data);
+    } else if (opCode == "11") {
+        ADD(operand, memoryType, data);
+    } else if (opCode == "12") {
+        SUB(operand, memoryType, data);
+    } else if (opCode == "13") {
+        DIV(operand, memoryType, data);
+    } else if (opCode == "14") {
+        MUL(operand, memoryType, data);
+    }
+}
 void startSystem(string inputFileName) {
 
     cout << "Starting system..." << endl;
     cout << "System started." << endl;
 
-    cout << "Enter name of input file: " << endl;
     memory.placeStringsInMemory(parseFile(inputFileName));
     cout << "Memory Contents:" << endl;
     for (const auto& pair : memory.getMemoryMap()) {
+        interpretLine(pair.second);
         cout << pair.first << ": " << pair.second << endl;
     }
 
+    cout << "RC1: " << registerMap.at("RC1") -> getData() << endl;
+    cout << "RA1: " <<registerMap.at("RA1") -> getData() << endl;
+
+
+    cout << "Memory Contents After Execution:" << endl;
+
+
+
+    for (const auto& pair : memory.getMemoryMap()) {
+        interpretLine(pair.second);
+        cout << pair.first << ": " << pair.second << endl;
+    }
+}
+
+
+////////////////////////////////
+// CPU OPERATIONS
+
+void MOV(string operand, string memoryType, string data) {
+       if (memoryType == "0") {
+            registerMap[convertToLetter(operand)] -> 
+            setData(hexToDecimal(memory.getMemory(hexToDecimal(data))));
+        } else {
+            registerMap[convertToLetter(operand)] -> setData(hexToDecimal(data));
+        }
+}
+
+void PUT(string operand, string memoryType, string data) {
+    int index = hexToDecimal(operand);
+    int address = stoi(data.substr(2,2));
+    string regAddress = data.substr(2,2);
+
+    if (memoryType == "0") {
+        if (address >= 86 && address <= 99) {
+
+
+            memory.insertIntoMemory(index, 
+            (dataToMemory(registerMap[convertToLetter(regAddress)] -> getData())));
+
+
+        } else {
+            memory.insertIntoMemory(index, 
+            memory.getMemory(hexToDecimal(data)));
+        }
+
+      
+    } else {
+        memory.insertIntoMemory(address, to_string(hexToDecimal(data)));
+    }
+}
+
+void ADD(string operand, string memoryType, string data) {
+    int operandData = registerMap[convertToLetter(operand)] -> getData();
+    string argumentRegister = convertToLetter(data.substr(2,2));
+    if (memoryType == "0") {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData + 
+        registerMap[argumentRegister] -> getData());
+    } else {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData + hexToDecimal(data));
+    }
+}
+
+void SUB(string operand, string memoryType, string data) {
+    int operandData = registerMap[convertToLetter(operand)] -> getData();
+    string argumentRegister = convertToLetter(data.substr(2,2));
+    if (memoryType == "0") {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData - 
+        registerMap[argumentRegister] -> getData());
+    } else {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData - hexToDecimal(data));
+    }
+}
+
+void MUL(string operand, string memoryType, string data) {
+    int operandData = registerMap[convertToLetter(operand)] -> getData();
+    string argumentRegister = convertToLetter(data.substr(2,2));
+    if (memoryType == "0") {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData * 
+        registerMap[argumentRegister] -> getData());
+    } else {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData * hexToDecimal(data));
+    }
+}
+
+void DIV(string operand, string memoryType, string data) {
+    int operandData = registerMap[convertToLetter(operand)] -> getData();
+    string argumentRegister = convertToLetter(data.substr(2,2));
+    if (memoryType == "0") {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData / 
+        registerMap[argumentRegister] -> getData());
+    } else {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData / hexToDecimal(data));
+    }
 }
 
 

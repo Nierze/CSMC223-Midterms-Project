@@ -1,6 +1,8 @@
 #ifndef PARSE_HPP
 #define PARSE_HPP
 #include "libraries.hpp"
+#include <cctype>
+#include <string>
 using namespace std;
 
 // inline vector<vector<string>> parseFile(const string& filename) {
@@ -41,7 +43,81 @@ inline vector<string> parseFile(string fileName) {
 
     return data;
 }
+inline string convertToLetter(string str) {
+    string result;
 
+    if (str == "01") {
+        result = "MOV";
+    } else if (str == "02") {
+        result = "PUT";
+    } else if (str == "03") {
+        result = "PRN";
+    } else if (str == "04") {
+        result = "OBL";
+    } else if (str == "11") {
+        result = "ADD";
+    } else if (str == "12") {
+        result = "SUB";
+    } else if (str == "13") {
+        result = "DIV";
+    } else if (str == "14") {
+        result = "MUL";
+    } else if (str == "15") {
+        result = "MOD";
+    } else if (str == "21") {
+        result = "GTN";
+    } else if (str == "22") {
+        result = "LTN";
+    } else if (str == "23") {
+        result = "EQU";
+    } else if (str == "24") {
+        result = "GEQ";
+    } else if (str == "25") {
+        result = "LEQ";
+    } else if (str == "26") {
+        result = "XXX";
+    } else if (str == "99") {
+        result = "NIR";
+    } else if (str == "98") {
+        result = "CIR";
+    } else if (str == "97") {
+        result = "RA1";
+    } else if (str == "96") {
+        result = "RB1";
+    } else if (str == "95") {
+        result = "RC1";
+    } else if (str == "94") {
+        result = "RD1";
+    } else if (str == "93") {
+        result = "RA2";
+    } else if (str == "92") {
+        result = "RB2";
+    } else if (str == "91") {
+        result = "RC2";
+    } else if (str == "90") {
+        result = "RD2";
+    } else if (str == "89") {
+        result = "RA3";
+    } else if (str == "88") {
+        result = "RB3";
+    } else if (str == "87") {
+        result = "RC3";
+    } else if (str == "86") {
+        result = "RD3";
+    } else if (str == "85") {
+        result = "RA4";
+    } else if (str == "84") {
+        result = "RB4";
+    } else if (str == "83") {
+        result = "RC4";
+    } else if (str == "82") {
+        result = "RD4";
+    } else {
+        throw invalid_argument("Invalid number string");
+    }
+
+    return result;
+}
 inline string convertToNum(string str) {
     char end = '0';
     string result;
@@ -131,16 +207,14 @@ inline string convertToNum(string str) {
 }
 
 inline int hexToDecimal(string hexStr) {
-    unsigned long decimalValue;  // Use unsigned for correct large number handling
+    unsigned long decimalValue;  
     stringstream ss;
 
-    ss << hex << hexStr;  // Treat the string as a hexadecimal input stream
+    ss << hex << hexStr;  
 
-    // Use 'strtol' for error checking 
     char* endptr;  
     decimalValue = strtol(hexStr.c_str(), &endptr, 16);
 
-    // Error checking:
     if (*endptr != '\0') {
         throw invalid_argument("Invalid hexadecimal string");
     }
@@ -167,7 +241,6 @@ inline string decimalToHex(int decimalNum) {
 }
 
 
-
 inline string lineToNum(string str) {
     string output;
 
@@ -176,10 +249,19 @@ inline string lineToNum(string str) {
     string word;
     int index = 1;
     while (iss >> word) {
+        string num;
+        if (index == 2 && (!isalpha(word.at(0)))) {
+            num = decimalToHex(stoi(word));
+            while (num.length() < 2) {
+                num = "0" + num;
+            }
+        } else {
+            num = convertToNum(word);
+        }
         // Convert each word to its corresponding number
-        string num = convertToNum(word);
+
         // Append the number to the output string
-        
+
         if (index == 3) {
             while (num.length() < 5) {
                 num = "0" + num;
@@ -189,6 +271,14 @@ inline string lineToNum(string str) {
         index++;
     }
 
+    return output;
+}
+
+inline string dataToMemory(int data) {
+    string output(decimalToHex(data));
+    while (output.length() < 9) {
+        output = "0" + output;
+    }
     return output;
 }
 

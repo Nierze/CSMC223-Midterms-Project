@@ -6,8 +6,9 @@ using namespace std;
 
 
 int main() {
-    startSystem("input/in.txt");
+    //startSystem("input/in2.txt");
 
-
+    cout << decimalToHex(-420);
+    
     return 0;
 }

@@ -9,4 +9,5 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include <ranges> 
 #include <cassert>

@@ -38,6 +38,10 @@ public:
         return memoryMap;
     }
 
+    void insertIntoMemory(int index, string data) {
+        memoryMap.insert(make_pair(index, data));
+    }
+
 private:
     int currentMemoryAmount;
     int maxMemoryAmount;
