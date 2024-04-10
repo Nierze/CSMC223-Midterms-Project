@@ -304,5 +304,23 @@ inline string negativeCheck(string line) {
     return output;
 }
 
+inline bool checkIfRegister(string line) {
+    bool isHex;
+    for (auto x : line) {
+        if (isalpha(x)) {
+            isHex = true;
+        }
+    }
+
+    if (isHex == false) {
+        int lineNum = stoi(line);
+        if (lineNum >= 86 && 99 >= lineNum) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
 
 #endif

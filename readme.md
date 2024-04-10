@@ -43,13 +43,13 @@ Values/Instructions stored in memory are stored as a 9 digit Hexadecimal.
 
 <br>
 
-The last 5 digits signifies the argument of the the operation. Each part of this 5 digits have its meaning.
+The last 6 digits signifies the argument of the the operation. Each part of this 6 digits have its meaning.
 
-* **C**: the 5th digit will only either be a `1` or a `0`. A `1` means that the remaining 4 digits will be a numerical value. A `0` signifies that the number stored in the remaining 4 digits is an address in the memory.
+* **C**: the 5th digit will only either be a `1` or a `0`. A `1` means that the remaining 4 digits will be a numerical value. A `0` signifies that the number stored in the next 4 digits is an address in the memory.
 
-* **D**: The last 4 digits, as stated in **C** will contain either the value or the address that will be used as an argument for the operation dictated by **A**.
+* **D**: The next 4 digits, as stated in **C** will contain either the value or the address that will be used as an argument for the operation dictated by **A**.
 
-<br>
+* **E**: This last digit will represent whether the numerical data in **D** is a positive or negative number. A value of `1` indicates that **D** is a negative number and a value of `0` indicates that it is a positive number.
 
 Example: Supposed you want to load the value `69` into the **RA1** register and add it to the contents of the **RB1** register and store it into the memory location `44`.
 
@@ -61,11 +61,11 @@ Supposed RB1 contains the value `420`.
 
 That would look like this in memory:
 
-`0`  : `019710045`<br>
-`1`  : `119600097`<br>
-`2`  : `022C10096`<br>
+`0`  : `0197100450`<br>
+`1`  : `1196000970`<br>
+`2`  : `022C100960`<br>
 ... <br>
-`44` : `0000001E9`<br>
+`44` : `0000001E90`<br>
 
 
 
@@ -98,17 +98,10 @@ That would look like this in memory:
 
 \<OPERATION> \<REGISTER> \<VALUE>\\\<ADDRESS>
 
-MOV RC1 95<br>
-MOV RC2 96<br>
-MOV RC3 #RC1<br>
-ADD RC1 RC2<br>
-ADD RC1 RC3<br>
-MOV NIR 4<br>
-MOV NIR 4<br>
-PUT RC1 97<br>
-
-
-![Diagram](./asssets/instructionSet.png)
+MOV RA1 [69] <br>
+MOV RA2 [420] <br>
+ADD RA1 RA2 <br>
+PUT 69 RA1 <br>
 
 Result:
-Value of 97 will become 377
+Value of 69 will become 489

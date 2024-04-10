@@ -43,7 +43,9 @@ void interpretLine(string line) {
     string operand = line.substr(2, 2);
     string memoryType = line.substr(4, 1);
     string data = line.substr(5, 4);
+    
     if (opCode == "01") {
+        
         MOV(operand, memoryType, data);
     } else if (opCode == "02") {
         PUT(operand, memoryType, data);
@@ -65,8 +67,10 @@ void startSystem(string inputFileName) {
     memory.placeStringsInMemory(parseFile(inputFileName));
     cout << "Memory Contents:" << endl;
     for (const auto& pair : memory.getMemoryMap()) {
-        interpretLine(pair.second);
+        
+        
         cout << pair.first << ": " << pair.second << endl;
+        interpretLine(pair.second);
     }
 
     cout << "RC1: " << registerMap.at("RC1") -> getData() << endl;
@@ -88,12 +92,23 @@ void startSystem(string inputFileName) {
 // CPU OPERATIONS
 
 void MOV(string operand, string memoryType, string data) {
+    
     int index = hexToDecimal(operand);
-    int address = stoi(data.substr(2,3));
+    int address;
+    if (checkIfRegister(data)) {
+        address = stoi(data.substr(2,2));
+    } else {
+        
+        address = hexToDecimal(data.substr(2,2));
+    }
+    
     string regAddress = convertToLetter(data.substr(2,2));
+    
 
        if (memoryType == "0") {
+        //cout << "Memory Type: " << stoi(data.substr(2,2)) << endl;
             if (address >= 86 && address <= 99) { 
+                
                 registerMap[convertToLetter(operand)] ->
                 setData(registerMap[regAddress] -> getData());
                 
@@ -109,7 +124,13 @@ void MOV(string operand, string memoryType, string data) {
 
 void PUT(string operand, string memoryType, string data) {
     int index = hexToDecimal(operand);
-    int address = stoi(data.substr(2,2));
+    int address;
+    if (checkIfRegister(data)) {
+        address = stoi(data.substr(2,2));
+    } else {
+        
+        address = hexToDecimal(data.substr(2,2));
+    }
     string regAddress = data.substr(2,2);
 
     if (memoryType == "0") {
@@ -123,8 +144,14 @@ void PUT(string operand, string memoryType, string data) {
             memory.getMemory(hexToDecimal(data)));
         }  
     } else {
-        memory.insertIntoMemory(index, to_string(hexToDecimal(data)));
+        cout << "sex\n";
+        string value = data;
+        while (value.length() < 9) {
+            value = '0' + value;
+        }
+        memory.insertIntoMemory(index, value);
     }
+    
     memory.insertIntoMemory(index, negativeCheck(memory.getMemory(index)));
 }
 
