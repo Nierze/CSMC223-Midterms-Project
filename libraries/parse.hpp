@@ -209,10 +209,18 @@ inline string convertToNum(string str) {
 }
 
 inline int hexToDecimal(string hexStr) {
+    bool isZero = true;
     string str = hexStr.substr(0,9);
     unsigned long decimalValue;  
     stringstream ss;
 
+    for (int i = 0; i < hexStr.length()-1; i++) {
+        if (hexStr.at(i) != '0') {
+            isZero = false;
+            break;
+        }
+    }
+    cout << isZero << endl;
     ss << hex << str;  
 
     char* endptr;  
@@ -222,7 +230,7 @@ inline int hexToDecimal(string hexStr) {
         throw invalid_argument("Invalid hexadecimal string");
     }
 
-    return (hexStr.at(hexStr.length()-1) == '1') ? decimalValue * -1 : decimalValue;
+    return (((hexStr.at(hexStr.length()-1) == '1') && isZero)) ? decimalValue * -1 : decimalValue;
 }
 
 inline string decimalToHex(int decimalNum) {

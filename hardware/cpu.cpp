@@ -73,14 +73,7 @@ void startSystem(string inputFileName) {
         interpretLine(pair.second);
     }
 
-    cout << "RC1: " << registerMap.at("RC1") -> getData() << endl;
-    cout << "RA1: " <<registerMap.at("RA1") -> getData() << endl;
-    cout << "RB1: " <<registerMap.at("RB1") -> getData() << endl;
-
-
     cout << "Memory Contents After Execution:" << endl;
-
-
 
     for (const auto& pair : memory.getMemoryMap()) {
         cout << pair.first << ": " << pair.second << endl;
@@ -95,18 +88,16 @@ void MOV(string operand, string memoryType, string data) {
     
     int index = hexToDecimal(operand);
     int address;
+    
     if (checkIfRegister(data)) {
         address = stoi(data.substr(2,2));
     } else {
-        
         address = hexToDecimal(data.substr(2,2));
     }
-    
     string regAddress = convertToLetter(data.substr(2,2));
-    
+
 
        if (memoryType == "0") {
-        //cout << "Memory Type: " << stoi(data.substr(2,2)) << endl;
             if (address >= 86 && address <= 99) { 
                 
                 registerMap[convertToLetter(operand)] ->
@@ -117,7 +108,7 @@ void MOV(string operand, string memoryType, string data) {
             
                 setData(hexToDecimal(memory.getMemory(hexToDecimal(data))));
             }
-            } else {
+        } else {
             registerMap[convertToLetter(operand)] -> setData(hexToDecimal(data));
         }
 }
@@ -144,7 +135,6 @@ void PUT(string operand, string memoryType, string data) {
             memory.getMemory(hexToDecimal(data)));
         }  
     } else {
-        cout << "sex\n";
         string value = data;
         while (value.length() < 9) {
             value = '0' + value;
@@ -158,12 +148,14 @@ void PUT(string operand, string memoryType, string data) {
 void ADD(string operand, string memoryType, string data) {
     int operandData = registerMap[convertToLetter(operand)] -> getData();
     string argumentRegister = convertToLetter(data.substr(2,2));
-    if (memoryType == "0") {
 
+    if (memoryType == "0") {
+        
         registerMap[convertToLetter(operand)] -> 
         setData(operandData + 
         registerMap[argumentRegister] -> getData());
     } else {
+        
         registerMap[convertToLetter(operand)] -> 
         setData(operandData + hexToDecimal(data));
     }
@@ -209,5 +201,17 @@ void DIV(string operand, string memoryType, string data) {
     }
 }
 
+void MOD(string operand, string memoryType, string data) {
+    int operandData = registerMap[convertToLetter(operand)] -> getData();
+    string argumentRegister = convertToLetter(data.substr(2,2));
+    if (memoryType == "0") {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData % 
+        registerMap[argumentRegister] -> getData());
+    } else {
+        registerMap[convertToLetter(operand)] -> 
+        setData(operandData % hexToDecimal(data));
+    }
+}
 
 
