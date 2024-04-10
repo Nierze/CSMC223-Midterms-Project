@@ -18,6 +18,7 @@ void SUB(string operand, string memoryType, string data);
 void MUL(string operand, string memoryType, string data);
 void DIV(string operand, string memoryType, string data);
 void MOD(string operand, string memoryType, string data);
+void CMP(string operand, string memoryType, string data);
 int inputPrompt();
 void runtimeLoop();
 void showRegisters();
@@ -46,6 +47,8 @@ map<string, Register*> registerMap {
     {"RD4", new Register(0, "8", "RD4", 82)}
 };
 
+pair<int, int> CMPReg;
+
 void interpretLine(string line) {
     string opCode = line.substr(0, 2);
     string operand = line.substr(2, 2);
@@ -65,6 +68,12 @@ void interpretLine(string line) {
         DIV(operand, memoryType, data);
     } else if (opCode == "14") {
         MUL(operand, memoryType, data);
+    } else if (opCode == "15") {
+        MOD(operand, memoryType, data);
+    } else if (opCode == "16") {
+        CMP(operand, memoryType, data);
+    } else {
+        throw invalid_argument("Invalid OpCode: " + opCode);
     }
 }
 
@@ -111,9 +120,9 @@ int inputPrompt() {
 void showRegisters() {
     cout << endl;
     cout << "================================" << endl;
-    cout << "| Registers:" << setw(201) << " |" << endl;
+    cout << "| Registers:" << setw(21) << " |" << endl;
     for (const auto& pair : registerMap) {
-        cout << "| " << pair.first << ": " << pair.second -> getData() << setw(24) << " |" << endl;
+        cout << "| " << pair.first << ": " << setw(24) << pair.second -> getData() <<  " |" << endl;
     }
     cout << "================================" << endl;
 }
@@ -140,7 +149,7 @@ void runtimeLoop() {
             }
             interpretLine(memory.getMemory(i));
             i++;
-            registerMap.at("CIR")++;
+            registerMap.at("CIR") -> setData(i);
         } else if (input == 2) {
             cout << "Program has been stopped." << endl;
             break;
@@ -283,5 +292,11 @@ void MOD(string operand, string memoryType, string data) {
         setData(operandData % hexToDecimal(data));
     }
 }
+
+void CMP(string operand, string memoryType, string data) {
+    CMPReg.first = registerMap[convertToLetter(operand)] -> getData();
+    CMPReg.second = registerMap[convertToLetter(data.substr(2,2))] -> getData();
+}
+
 
 
