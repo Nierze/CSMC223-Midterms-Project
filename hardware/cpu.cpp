@@ -1,6 +1,8 @@
 #include "../libraries/libraries.hpp"
 #include "../libraries/components.hpp"
+#include <iterator>
 #include <string>
+#include <utility>
 using namespace std;
 
 MemoryClass memory(64);
@@ -15,6 +17,13 @@ void ADD(string operand, string memoryType, string data);
 void SUB(string operand, string memoryType, string data);
 void MUL(string operand, string memoryType, string data);
 void DIV(string operand, string memoryType, string data);
+void MOD(string operand, string memoryType, string data);
+int inputPrompt();
+void runtimeLoop();
+void showRegisters();
+void interpretLine(string line);
+void startSystem(string inputFileName);
+
 
 map<string, Register*> registerMap {
     {"NIR", new Register(0, "1", "NIR", 99)},
@@ -37,7 +46,6 @@ map<string, Register*> registerMap {
     {"RD4", new Register(0, "8", "RD4", 82)}
 };
 
-  
 void interpretLine(string line) {
     string opCode = line.substr(0, 2);
     string operand = line.substr(2, 2);
@@ -59,24 +67,86 @@ void interpretLine(string line) {
         MUL(operand, memoryType, data);
     }
 }
+
 void startSystem(string inputFileName) {
+    
 
     cout << "Starting system..." << endl;
     cout << "System started." << endl;
 
     memory.placeStringsInMemory(parseFile(inputFileName));
-    cout << "Memory Contents:" << endl;
-    for (const auto& pair : memory.getMemoryMap()) {
+    runtimeLoop();
+
+    // cout << "Memory Contents:" << endl;
+
+    // for (const auto& pair : memory.getMemoryMap()) {
         
         
-        cout << pair.first << ": " << pair.second << endl;
-        interpretLine(pair.second);
+    //     cout << pair.first << ": " << pair.second << endl;
+    //     interpretLine(pair.second);
+    // }
+
+    // cout << "Memory Contents After Execution:" << endl;
+
+    // for (const auto& pair : memory.getMemoryMap()) {
+    //     cout << pair.first << ": " << pair.second << endl;
+    // }
+}
+
+int inputPrompt() {
+    int choice;
+    cout << "================================" << endl;
+    cout << "| Menu                         |" << endl;
+    cout << "================================" << endl;
+    cout << "| 1 - Go to next instruction   |" << endl;
+    cout << "| 2 - Stop program             |" << endl;
+    cout << "| 3 - Show registers           |" << endl;
+    cout << "| 4 - Show memory usage        |" << endl;
+    cout << "================================" << endl;
+    cout << "Input: ";
+    cin >> choice;
+    return choice;
+}
+
+void showRegisters() {
+    cout << endl;
+    cout << "================================" << endl;
+    cout << "| Registers:" << setw(201) << " |" << endl;
+    for (const auto& pair : registerMap) {
+        cout << "| " << pair.first << ": " << pair.second -> getData() << setw(24) << " |" << endl;
     }
+    cout << "================================" << endl;
+}
 
-    cout << "Memory Contents After Execution:" << endl;
+void runtimeLoop() {
 
-    for (const auto& pair : memory.getMemoryMap()) {
-        cout << pair.first << ": " << pair.second << endl;
+    for (int i = registerMap.at("CIR") -> getData(); true;) {
+        cout << endl;
+
+        string arrow;
+
+        cout << "Memory Contents:" << endl;
+        for (const auto& pair : memory.getMemoryMap()) {
+            arrow = (i == pair.first) ? " <--" : " ";
+            cout << pair.first << ": " << pair.second << arrow << endl;
+        } 
+
+        int input = inputPrompt();
+
+        if(input == 1) {
+            if (memory.getMemory(i).substr(0,2) == "44" ) {
+                cout << "Program has successfully ended." << endl;
+                break;
+            }
+            interpretLine(memory.getMemory(i));
+            i++;
+            registerMap.at("CIR")++;
+        } else if (input == 2) {
+            cout << "Program has been stopped." << endl;
+            break;
+        } else if (input == 3) {
+            showRegisters();
+        }
     }
 }
 

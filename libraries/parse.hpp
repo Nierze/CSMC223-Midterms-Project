@@ -125,6 +125,8 @@ inline string convertToNum(string str) {
     string result;
     if (str == "MOV") {
         result = "01";
+    } else if (str == "END") {
+        result = "44";
     } else if (str == "PUT") {
         result = "02";
     } else if (str == "PRN") {
@@ -220,7 +222,6 @@ inline int hexToDecimal(string hexStr) {
             break;
         }
     }
-    cout << isZero << endl;
     ss << hex << str;  
 
     char* endptr;  
