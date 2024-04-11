@@ -25,6 +25,7 @@ void LTN(string operand, string memoryType, string data);
 void EQU(string operand, string memoryType, string data);
 void GEQ(string operand, string memoryType, string data);
 void LEQ(string operand, string memoryType, string data);
+void JMP(string operand, string memoryType, string data);
 
 int inputPrompt();
 void runtimeLoop();
@@ -89,6 +90,8 @@ void interpretLine(string line) {
         GEQ(operand, memoryType, data);
     } else if (opCode == "25") {
         LEQ(operand, memoryType, data);
+    } else if (opCode == "26") {
+        JMP(operand, memoryType, data);
     }
     else {
         throw invalid_argument("Invalid OpCode: " + opCode);
@@ -131,6 +134,7 @@ int inputPrompt() {
     cout << "| 2 - Stop program             |" << endl;
     cout << "| 3 - Show registers           |" << endl;
     cout << "| 4 - Show memory usage        |" << endl;
+    cout << "| 5 - Execute all instructions |" << endl;
     cout << "================================" << endl;
     cout << "Input: ";
     cin >> choice;
@@ -148,8 +152,8 @@ void showRegisters() {
 }
 
 void runtimeLoop() {
-
     registerMap.at("NIR") -> setData(1);
+    bool executeAll = false;
 
     for (int i = registerMap.at("CIR") -> getData(); true;) {
         i = registerMap.at("CIR") -> getData();
@@ -163,11 +167,7 @@ void runtimeLoop() {
             cout << pair.first << ": " << pair.second << arrow << endl;
         } 
 
-        int input = inputPrompt();
-
-        if(input == 1) {
-
-            // if it is the end
+        if (executeAll == true) {
             if (memory.getMemory(i).substr(0,2) == "44" ) {
                 cout << "Program has successfully ended." << endl;
                 break;
@@ -185,14 +185,45 @@ void runtimeLoop() {
                 registerMap.at("NIR") -> setData(i + 1);
 
             }
+        } else {
+            int input = inputPrompt();
+
+            if(input == 1) {
+
+                // if it is the end
+                if (memory.getMemory(i).substr(0,2) == "44" ) {
+                    cout << "Program has successfully ended." << endl;
+                    break;
+                }
+
+                if (memory.getMemory(i).substr(0,1) == "2") {
+
+                    interpretLine(memory.getMemory(i));
+
+                } else {
+
+                    interpretLine(memory.getMemory(i));
+                    i++;
+                    registerMap.at("CIR") -> setData(i);
+                    registerMap.at("NIR") -> setData(i + 1);
+
+                }
 
 
-        } else if (input == 2) {
-            cout << "Program has been stopped." << endl;
-            break;
-        } else if (input == 3) {
-            showRegisters();
+            } else if (input == 2) {
+                cout << "Program has been stopped." << endl;
+                break;
+            } else if (input == 3) {
+                showRegisters();
+            } else if (input == 4) {
+                cout << "Memory Usage: " << endl;
+                // cout << "Used: " << memory.getMemoryMap().size() << endl;
+                // cout << "Total: " << memory.getMemorySize() << endl;
+            } else if (input == 5) {
+                executeAll = true;
+            }
         }
+
     }
 }
 
@@ -389,6 +420,11 @@ void LEQ(string operand, string memoryType, string data) {
         registerMap["CIR"] -> setData(registerMap["CIR"] -> getData() + 1);
         registerMap["NIR"] -> setData(registerMap["CIR"] -> getData() + 2);
     }
+}
+
+void JMP(string operand, string memoryType, string data) {
+    registerMap["CIR"] -> setData(hexToDecimal(data));
+    registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
 }
 
 

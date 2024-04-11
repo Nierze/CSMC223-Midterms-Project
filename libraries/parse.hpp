@@ -39,6 +39,7 @@ inline vector<string> parseFile(string fileName) {
     while (getline(file, line)) {
         string content;
         data.push_back(lineToNum(line));
+        
     }
 
     return data;
@@ -46,7 +47,6 @@ inline vector<string> parseFile(string fileName) {
 
 inline string convertToLetter(string str) {
     string result;
-
     if (str == "01") {
         result = "MOV";
     } else if (str == "02") {
@@ -76,7 +76,7 @@ inline string convertToLetter(string str) {
     } else if (str == "25") {
         result = "LEQ";
     } else if (str == "26") {
-        result = "XXX";
+        result = "JMP";
     } else if (str == "99") {
         result = "NIR";
     } else if (str == "98") {
@@ -155,7 +155,7 @@ inline string convertToNum(string str) {
         result = "24";
     } else if (str == "LEQ") {
         result = "25";
-    } else if (str == "XXX") {
+    } else if (str == "JMP") {
         result = "26";
     } else if (str == "NIR") {
         result = "99";
@@ -217,7 +217,6 @@ inline int hexToDecimal(string hexStr) {
     string str = hexStr.substr(0,9);
     unsigned long decimalValue;  
     stringstream ss;
-
     for (int i = 0; i < hexStr.length()-2; i++) {
         if (hexStr.at(i) != '0') {
             isZero = false;
@@ -271,6 +270,7 @@ inline string lineToNum(string str) {
     istringstream iss(str);
     string word;
     int index = 1;
+
     while (iss >> word) {
         string num;
         if (index == 2 && (!isalpha(word.at(0)))) {

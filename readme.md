@@ -1,12 +1,11 @@
 # Instructions
 
-
 ## Syntax
 
-\<OPERATION> \<REGISTER> \<VALUE>\\\<ADDRESS>
+`<OPERATION> <REGISTER> <VALUE>\<ADDRESS>`
 
 To define a value instead of an address, supposed you want to store the number `69` in memory address `50`, we will use `[]`.
-Example: `PUT 420 [69]`
+Example: `PUT 50 [69]`
 <br>
 
 ## Instructions
@@ -68,11 +67,6 @@ That would look like this in memory:
 `44` : `0000001E90`<br>
 
 
-
-
-
-
-
 ## Registers
 
 ### Data Registers
@@ -92,16 +86,52 @@ That would look like this in memory:
 <!-- |   CIA   | Holds the address of the current instruction   | **C**urrent **I**nstruction **A**ddress |
 -->
 
-### Sample Instructions 
+## Sample Instructions 
 
+`<OPERATION> <REGISTER> <VALUE>\<ADDRESS>`
 
+### Add the 69 and 420 and place it in memory location 69
 
-\<OPERATION> \<REGISTER> \<VALUE>\\\<ADDRESS>
-
-MOV RA1 [69] <br>
-MOV RA2 [420] <br>
-ADD RA1 RA2 <br>
-PUT 69 RA1 <br>
+`MOV RA1 [69]` <br>
+`MOV RA2 [420]` <br>
+`ADD RA1 RA2` <br>
+`PUT 69 RA1` <br>
 
 Result:
-Value of 69 will become 489
+Value of 69 will become 489 <br>
+
+### Put the numbers 1 - 10 in memory location 51 - 60 using a loop structure
+`MOV RA1 [0]` <br>
+`MOV RB1 [51]` <br>
+`MOV RC1 [1]` <br>
+`MOV RD1 [10]` <br>
+`ADD RA1 RC1` <br>
+`PUT RB1 RA1` <br>
+`ADD RB1 RC1` <br>
+`CMP RD1 RA1` <br>
+`GTN CMP 4` <br>
+`END 0 0` <br>
+
+Result: 
+The memory locations 51, 52, 53 .... 60 will have the values 1, 2, 3 .... 10 respectively
+
+
+### Assembly FizzBuzz
+Loop through the numbers 0 - 10 and place the results in memory location 50 - 60. if the number is an even number, put the value `0` in the memory location, if it is odd, put `1` otherwise.
+
+`MOV RA1 [60]`<br>
+`MOV RB1 [0]`<br>
+`MOV RD1 [50]`<br>
+`MOD RB1 [2]`<br>
+`MOV RB2 [1]`<br>
+`CMP RB1 RB2`<br>
+`EQU CMP 8`<br>
+`JMP 0 10`<br>
+`PUT RD1 [1]` <br>
+`JMP 0 11`<br>
+`PUT RD1 [0]` <br>
+`ADD RB1 [1]`<br>
+`ADD RD1 [1]`<br>
+`CMP RA1 RD1`<br>
+`GEQ CMP 3`<br>
+`END 0 0`<br>
