@@ -80,8 +80,10 @@ That would look like this in memory:
 ### Other Registers
 | Register | Purpose | Meaning |
 |----------|---------|--------|
-|   CIR   | Holds the current instruction   | **C**urrent **I**struction **R**egister|
+|   CIR   | Holds the current instruction   | **C**urrent **I**nstruction **R**egister|
 |   NIR   | Holds the address of the next instruction    | **N**ext **I**nstruction **R**egister|
+|   CM1   | Holds the value to be compared   | **C**o**M**pare **1**|
+|   CM2   | Holds the value to be compared   | **C**o**M**pare **2**|
 
 <!-- |   CIA   | Holds the address of the current instruction   | **C**urrent **I**nstruction **A**ddress |
 -->
@@ -135,3 +137,18 @@ Loop through the numbers 0 - 10 and place the results in memory location 50 - 60
 `CMP RA1 RD1`<br>
 `GEQ CMP 3`<br>
 `END 0 0`<br>
+
+
+### Get the average of 3 numbers
+Supposed the 3 numbers are `69`, `420`, `70` and store it in memory location `69`
+
+`MOV RA1 [69]` <br>
+`MOV RA2 [420]` <br>
+`MOV RA3 [70]` <br>
+`ADD RA1 RA2` <br>
+`ADD RA1 RA3` <br>
+`DIV RA1 [3]` <br>
+`PUT 69 RA1` <br>
+`END 0 0` <br>
+
+Result: `186` will be stored in memory location `69` as hexadecimal. (Note, this project is designed not to handle floating point values.)
