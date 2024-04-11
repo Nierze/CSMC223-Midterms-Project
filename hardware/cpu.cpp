@@ -20,6 +20,12 @@ void MUL(string operand, string memoryType, string data);
 void DIV(string operand, string memoryType, string data);
 void MOD(string operand, string memoryType, string data);
 void CMP(string operand, string memoryType, string data);
+void GTN(string operand, string memoryType, string data);
+void LTN(string operand, string memoryType, string data);
+void EQU(string operand, string memoryType, string data);
+void GEQ(string operand, string memoryType, string data);
+void LEQ(string operand, string memoryType, string data);
+
 int inputPrompt();
 void runtimeLoop();
 void showRegisters();
@@ -28,7 +34,6 @@ void startSystem(string inputFileName);
 
 
 map<string, Register*> registerMap {
-    {"IDR", new Register(0, "1", "IDR", 100)},
     {"NIR", new Register(0, "1", "NIR", 99)},
     {"CIR", new Register(0, "1", "CIR", 98)},
     {"RA1", new Register(0, "64", "RA1", 97)}, 
@@ -50,8 +55,6 @@ map<string, Register*> registerMap {
     {"CM1", new Register(0, "64", "CM1", 81)},
     {"CM2", new Register(0, "64", "CM2", 80)}
 };
-
-
 
 void interpretLine(string line) {
     string opCode = line.substr(0, 2);
@@ -76,7 +79,18 @@ void interpretLine(string line) {
         MOD(operand, memoryType, data);
     } else if (opCode == "16") {
         CMP(operand, memoryType, data);
-    } else {
+    } else if (opCode == "21") {
+        GTN(operand, memoryType, data);
+    } else if (opCode == "22") {
+        LTN(operand, memoryType, data);
+    } else if (opCode == "23") {
+        EQU(operand, memoryType, data);
+    } else if (opCode == "24") {
+        GEQ(operand, memoryType, data);
+    } else if (opCode == "25") {
+        LEQ(operand, memoryType, data);
+    }
+    else {
         throw invalid_argument("Invalid OpCode: " + opCode);
     }
 }
@@ -111,7 +125,9 @@ int inputPrompt() {
     cout << "================================" << endl;
     cout << "| Menu                         |" << endl;
     cout << "================================" << endl;
-    cout << "| 1 - Go to next instruction   |" << endl;
+    cout << "| 1 - Execute current          |" << endl; 
+    cout << "|     instruction and go to    |" << endl;
+    cout << "|     next                     |" << endl;
     cout << "| 2 - Stop program             |" << endl;
     cout << "| 3 - Show registers           |" << endl;
     cout << "| 4 - Show memory usage        |" << endl;
@@ -134,8 +150,9 @@ void showRegisters() {
 void runtimeLoop() {
 
     registerMap.at("NIR") -> setData(1);
-    
+
     for (int i = registerMap.at("CIR") -> getData(); true;) {
+        i = registerMap.at("CIR") -> getData();
         cout << endl;
 
         string arrow;
@@ -149,14 +166,27 @@ void runtimeLoop() {
         int input = inputPrompt();
 
         if(input == 1) {
+
+            // if it is the end
             if (memory.getMemory(i).substr(0,2) == "44" ) {
                 cout << "Program has successfully ended." << endl;
                 break;
             }
-            interpretLine(memory.getMemory(i));
-            i++;
-            registerMap.at("CIR") -> setData(i);
-            registerMap.at("NIR") -> setData(i + 1);
+
+            if (memory.getMemory(i).substr(0,1) == "2") {
+
+                interpretLine(memory.getMemory(i));
+
+            } else {
+
+                interpretLine(memory.getMemory(i));
+                i++;
+                registerMap.at("CIR") -> setData(i);
+                registerMap.at("NIR") -> setData(i + 1);
+
+            }
+
+
         } else if (input == 2) {
             cout << "Program has been stopped." << endl;
             break;
@@ -200,12 +230,17 @@ void MOV(string operand, string memoryType, string data) {
 }
 
 void PUT(string operand, string memoryType, string data) {
+
+    // forgive me uwu
     int index = hexToDecimal(operand);
+    if (checkIfRegister(operand)) { 
+        index = registerMap[convertToLetter(operand)] -> getData();
+    }
+
     int address;
     if (checkIfRegister(data)) {
         address = stoi(data.substr(2,2));
     } else {
-        
         address = hexToDecimal(data.substr(2,2));
     }
     string regAddress = data.substr(2,2);
@@ -304,6 +339,59 @@ void CMP(string operand, string memoryType, string data) {
     registerMap["CM1"] -> setData(registerMap[convertToLetter(operand)] -> getData());
     registerMap["CM2"] -> setData(registerMap[convertToLetter(data.substr(2,2))] -> getData());
 }
+
+void GTN(string operand, string memoryType, string data) {
+
+    if (registerMap["CM1"] -> getData() > registerMap["CM2"] -> getData()) {
+        registerMap["CIR"] -> setData(hexToDecimal(data));
+        registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
+    } else {
+        registerMap["CIR"] -> setData(registerMap["CIR"] -> getData() + 1);
+        registerMap["NIR"] -> setData(registerMap["CIR"] -> getData() + 2);
+    }
+}
+
+void LTN(string operand, string memoryType, string data) {
+    if (registerMap["CM1"] -> getData() < registerMap["CM2"] -> getData()) {
+        registerMap["CIR"] -> setData(hexToDecimal(data));
+        registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
+    } else {
+        registerMap["CIR"] -> setData(registerMap["CIR"] -> getData() + 1);
+        registerMap["NIR"] -> setData(registerMap["CIR"] -> getData() + 2);
+    }
+}
+
+void EQU(string operand, string memoryType, string data) {
+    if (registerMap["CM1"] -> getData() == registerMap["CM2"] -> getData()) {
+        registerMap["CIR"] -> setData(hexToDecimal(data));
+        registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
+    } else {
+        registerMap["CIR"] -> setData(registerMap["CIR"] -> getData() + 1);
+        registerMap["NIR"] -> setData(registerMap["CIR"] -> getData() + 2);
+    }
+}
+
+void GEQ(string operand, string memoryType, string data) {
+    if (registerMap["CM1"] -> getData() >= registerMap["CM2"] -> getData()) {
+        registerMap["CIR"] -> setData(hexToDecimal(data));
+        registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
+    } else {
+        registerMap["CIR"] -> setData(registerMap["CIR"] -> getData() + 1);
+        registerMap["NIR"] -> setData(registerMap["CIR"] -> getData() + 2);
+    }
+}
+
+void LEQ(string operand, string memoryType, string data) {
+    if (registerMap["CM1"] -> getData() <= registerMap["CM2"] -> getData()) {
+        registerMap["CIR"] -> setData(hexToDecimal(data));
+        registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
+    } else {
+        registerMap["CIR"] -> setData(registerMap["CIR"] -> getData() + 1);
+        registerMap["NIR"] -> setData(registerMap["CIR"] -> getData() + 2);
+    }
+}
+
+
 
 
 

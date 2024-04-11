@@ -23,11 +23,11 @@ Instructions will be represented as a 2 digit Hexadecimal in memory for the sake
 `1 3` DIV = **Division** operation.<br>
 `1 4` MUL = **Multiplication** operation.<br>
 `1 5` MOD = **Modulo** operation.<br>
-`2 1` GTN = **Greater than** operation. <br>
-`2 2` LTN = **Less than** operation. <br>
-`2 3` EQU = **Equals** operation <br>
-`2 4` GEQ = **Greater than or Equals** operation. <br>
-`2 5` LEQ = **Less than or Equals** operation. <br>
+`2 1` GTN = Jump if **Greater than** operation. <br>
+`2 2` LTN = Jump if **Less than** operation. <br>
+`2 3` EQU = Jump if **Equals** operation <br>
+`2 4` GEQ = Jump if **Greater than or Equals** operation. <br>
+`2 5` LEQ = Jump if **Less than or Equals** operation. <br>
 `2 6` XXX = **A little surprise**.
 
 ## Memory 

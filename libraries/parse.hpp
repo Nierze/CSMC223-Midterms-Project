@@ -143,6 +143,8 @@ inline string convertToNum(string str) {
         result = "14";
     } else if (str == "MOD") {
         result = "15";
+    } else if (str == "CMP") {
+        result = "16";
     } else if (str == "GTN") {
         result = "21";
     } else if (str == "LTN") {
@@ -216,7 +218,7 @@ inline int hexToDecimal(string hexStr) {
     unsigned long decimalValue;  
     stringstream ss;
 
-    for (int i = 0; i < hexStr.length()-1; i++) {
+    for (int i = 0; i < hexStr.length()-2; i++) {
         if (hexStr.at(i) != '0') {
             isZero = false;
             break;
@@ -230,8 +232,8 @@ inline int hexToDecimal(string hexStr) {
     if (*endptr != '\0') {
         throw invalid_argument("Invalid hexadecimal string");
     }
-
-    return (((hexStr.at(hexStr.length()-1) == '1') && isZero)) ? decimalValue * -1 : decimalValue;
+    //cout << "Decimal value: " << decimalValue << "\n" << " isZero: " << isZero << "\n";
+    return (((hexStr.at(hexStr.length()-2) == '1') && isZero)) ? decimalValue * -1 : decimalValue;
 }
 
 inline string decimalToHex(int decimalNum) {
