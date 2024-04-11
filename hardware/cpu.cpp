@@ -8,6 +8,7 @@ using namespace std;
 MemoryClass memory(64);
 
 
+
 ////////////////////////////////
 // PROTOTYPES
 
@@ -27,8 +28,9 @@ void startSystem(string inputFileName);
 
 
 map<string, Register*> registerMap {
+    {"IDR", new Register(0, "1", "IDR", 100)},
     {"NIR", new Register(0, "1", "NIR", 99)},
-    {"CIR", new Register(0, "1", "CIR", 98)}, 
+    {"CIR", new Register(0, "1", "CIR", 98)},
     {"RA1", new Register(0, "64", "RA1", 97)}, 
     {"RB1", new Register(0, "32", "RB1", 96)},
     {"RC1", new Register(0, "16", "RC1", 95)},
@@ -44,10 +46,12 @@ map<string, Register*> registerMap {
     {"RA4", new Register(0, "64", "RA4", 85)},
     {"RB4", new Register(0, "32", "RB4", 84)},
     {"RC4", new Register(0, "16", "RC4", 83)},
-    {"RD4", new Register(0, "8", "RD4", 82)}
+    {"RD4", new Register(0, "8", "RD4", 82)},
+    {"CM1", new Register(0, "64", "CM1", 81)},
+    {"CM2", new Register(0, "64", "CM2", 80)}
 };
 
-pair<int, int> CMPReg;
+
 
 void interpretLine(string line) {
     string opCode = line.substr(0, 2);
@@ -119,16 +123,18 @@ int inputPrompt() {
 
 void showRegisters() {
     cout << endl;
-    cout << "================================" << endl;
+    cout << "=================================" << endl;
     cout << "| Registers:" << setw(21) << " |" << endl;
     for (const auto& pair : registerMap) {
         cout << "| " << pair.first << ": " << setw(24) << pair.second -> getData() <<  " |" << endl;
     }
-    cout << "================================" << endl;
+    cout << "=================================" << endl;
 }
 
 void runtimeLoop() {
 
+    registerMap.at("NIR") -> setData(1);
+    
     for (int i = registerMap.at("CIR") -> getData(); true;) {
         cout << endl;
 
@@ -150,6 +156,7 @@ void runtimeLoop() {
             interpretLine(memory.getMemory(i));
             i++;
             registerMap.at("CIR") -> setData(i);
+            registerMap.at("NIR") -> setData(i + 1);
         } else if (input == 2) {
             cout << "Program has been stopped." << endl;
             break;
@@ -294,8 +301,8 @@ void MOD(string operand, string memoryType, string data) {
 }
 
 void CMP(string operand, string memoryType, string data) {
-    CMPReg.first = registerMap[convertToLetter(operand)] -> getData();
-    CMPReg.second = registerMap[convertToLetter(data.substr(2,2))] -> getData();
+    registerMap["CM1"] -> setData(registerMap[convertToLetter(operand)] -> getData());
+    registerMap["CM2"] -> setData(registerMap[convertToLetter(data.substr(2,2))] -> getData());
 }
 
 
