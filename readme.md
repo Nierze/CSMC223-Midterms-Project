@@ -27,10 +27,12 @@ Instructions will be represented as a 2 digit Hexadecimal in memory for the sake
 `2 3` EQU = Jump if **Equals** operation <br>
 `2 4` GEQ = Jump if **Greater than or Equals** operation. <br>
 `2 5` LEQ = Jump if **Less than or Equals** operation. <br>
-`2 6` XXX = **A little surprise**.
+`2 6` CMP = Compares 2 registers and prepares them for the comparison operators <br>
+`3 0` XXX = **A little surprise**.
+`4 4` END =  **Ends** the program.
 
 ## Memory 
-Values/Instructions stored in memory are stored as a 9 digit Hexadecimal.
+Values/Instructions stored in memory are stored as a 10 digit Hexadecimal.
 
 ![Diagram](./asssets/bitsExplanation.png)
 
