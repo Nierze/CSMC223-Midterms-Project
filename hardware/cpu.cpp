@@ -137,6 +137,7 @@ int inputPrompt() {
     cout << "| 3 - Show registers           |" << endl;
     cout << "| 4 - Show memory usage        |" << endl;
     cout << "| 5 - Execute all instructions |" << endl;
+    cout << "| 6 - Execute all until the end|" << endl;
     cout << "================================" << endl;
     cout << "Input: ";
     cin >> choice;
@@ -156,6 +157,7 @@ void showRegisters() {
 void runtimeLoop() {
     registerMap.at("NIR") -> setData(1);
     bool executeAll = false;
+    bool executeTillEnd = false;
 
     for (int i = registerMap.at("CIR") -> getData(); true;) {
         i = registerMap.at("CIR") -> getData();
@@ -170,9 +172,14 @@ void runtimeLoop() {
         } 
 
         if (executeAll == true) {
-            if (memory.getMemory(i).substr(0,2) == "44" ) {
-                cout << "Program has successfully ended." << endl;
-                break;
+            if (memory.getMemory(i).substr(0,2) == "44") {
+                if (executeTillEnd != true) {
+                    cout << "Program has successfully ended." << endl;
+                    break;
+                } else {
+                    executeAll = false;
+                }
+
             }
 
             if (memory.getMemory(i).substr(0,1) == "2") {
@@ -180,12 +187,12 @@ void runtimeLoop() {
                 interpretLine(memory.getMemory(i));
 
             } else {
-
-                interpretLine(memory.getMemory(i));
-                i++;
-                registerMap.at("CIR") -> setData(i);
-                registerMap.at("NIR") -> setData(i + 1);
-
+                if (memory.getMemory(i).substr(0,2) != "44") {
+                    interpretLine(memory.getMemory(i));
+                    i++;
+                    registerMap.at("CIR") -> setData(i);
+                    registerMap.at("NIR") -> setData(i + 1);
+                }
             }
         } else {
             int input = inputPrompt();
@@ -221,6 +228,11 @@ void runtimeLoop() {
                 showMemoryUsage();
             } else if (input == 5) {
                 executeAll = true;
+            } else if (input == 6) {
+                executeAll = true;
+                executeTillEnd = true;
+            } else {
+                cout << "Invalid input." << endl;
             }
         }
 
