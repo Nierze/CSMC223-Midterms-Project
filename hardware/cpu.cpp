@@ -30,8 +30,10 @@ void JMP(string operand, string memoryType, string data);
 int inputPrompt();
 void runtimeLoop();
 void showRegisters();
+void showMemoryUsage();
 void interpretLine(string line);
 void startSystem(string inputFileName);
+
 
 
 map<string, Register*> registerMap {
@@ -216,15 +218,34 @@ void runtimeLoop() {
             } else if (input == 3) {
                 showRegisters();
             } else if (input == 4) {
-                cout << "Memory Usage: " << endl;
-                // cout << "Used: " << memory.getMemoryMap().size() << endl;
-                // cout << "Total: " << memory.getMemorySize() << endl;
+                showMemoryUsage();
             } else if (input == 5) {
                 executeAll = true;
             }
         }
 
     }
+}
+
+void showMemoryUsage() {
+    float consumedMemory = static_cast<float>(memory.getConsumedMemory()) / 8;
+    consumedMemory = roundf(consumedMemory * 100) / 100; 
+    float registerConsumedMemory = 0;
+    for (auto reg : registerMap) {
+        if ((reg.first != "NIR" && reg.first != "CIR") && reg.second -> getData() != 0) {
+            registerConsumedMemory += stoi(reg.second -> getBitAmount());
+        }
+    }
+
+    registerConsumedMemory = registerConsumedMemory / 8;
+    registerConsumedMemory = roundf(registerConsumedMemory * 100) / 100;
+
+    cout << endl;
+    cout << "=================================" << endl;
+    cout << "| -Memory Usage-" << setw(17) << "|" << endl;
+    cout << "| Consumed Memory: " << setw(6) << consumedMemory << " bytes |" << endl;
+    cout << "| Consumed Registers: " << setw(3) << registerConsumedMemory << " bytes |" << endl;
+    cout << "=================================" << endl;
 }
 
 

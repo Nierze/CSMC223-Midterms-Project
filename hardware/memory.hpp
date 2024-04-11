@@ -47,6 +47,10 @@ public:
         }
     }
 
+    int getConsumedMemory() {
+        return memoryMap.size()*4;
+    }
+
 private:
     int currentMemoryAmount;
     int maxMemoryAmount;
