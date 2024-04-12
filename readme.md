@@ -28,7 +28,7 @@ Instructions will be represented as a 2 digit Hexadecimal in memory for the sake
 `2 4` GEQ = Jump if **Greater than or Equals** operation. <br>
 `2 5` LEQ = Jump if **Less than or Equals** operation. <br>
 `2 6` CMP = Compares 2 registers and prepares them for the comparison operators <br>
-`3 0` XXX = **A little surprise**.
+`3 0` XXX = **A little surprise**. <br>
 `4 4` END =  **Ends** the program.
 
 ## Memory 
