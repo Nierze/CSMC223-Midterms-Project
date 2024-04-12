@@ -38,6 +38,11 @@ public:
         return memoryMap;
     }
 
+    map<int, string>& getMemoryMapAddress() {
+        return memoryMap;
+    }
+
+
     void insertIntoMemory(int index, string data) {
         auto it = memoryMap.find(index);
         if (it != memoryMap.end()) {

@@ -26,6 +26,8 @@ void EQU(string operand, string memoryType, string data);
 void GEQ(string operand, string memoryType, string data);
 void LEQ(string operand, string memoryType, string data);
 void JMP(string operand, string memoryType, string data);
+void PRN(string operand, string memoryType, string data);
+void OBL(string operand, string memoryType, string data);
 
 int inputPrompt();
 void runtimeLoop();
@@ -92,7 +94,12 @@ void interpretLine(string line) {
         GEQ(operand, memoryType, data);
     } else if (opCode == "25") {
         LEQ(operand, memoryType, data);
-    } else if (opCode == "26") {
+    } else if (opCode == "03") {
+        PRN(operand, memoryType, data);
+    } else if (opCode == "04") {
+        OBL(operand, memoryType, data);
+    } 
+    else if (opCode == "26") {
         JMP(operand, memoryType, data);
     }
     else {
@@ -458,6 +465,24 @@ void LEQ(string operand, string memoryType, string data) {
 void JMP(string operand, string memoryType, string data) {
     registerMap["CIR"] -> setData(hexToDecimal(data));
     registerMap["NIR"] -> setData(hexToDecimal(data) + 1);
+}
+
+void PRN(string operand, string memoryType, string data) {
+    cout << registerMap[convertToLetter(operand)] -> getData() << endl;
+}
+
+void OBL(string operand, string memoryType, string data) {
+    int address;
+    
+    if (checkIfRegister(data)) {
+        address = stoi(data.substr(2,2));
+        registerMap[convertToLetter(to_string(address))] -> setData(0);
+    } else {
+        address = hexToDecimal(data.substr(2,2));
+        memory.getMemoryMapAddress().erase(address);
+    }
+
+
 }
 
 

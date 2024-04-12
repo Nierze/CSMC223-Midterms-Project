@@ -12,16 +12,58 @@ Example: `PUT 50 [69]`
 
 Instructions will be represented as a 2 digit Hexadecimal in memory for the sake of making it easier to understand. It will look like the following:
 <br>
+<hr>
 
-`0 1` MOV = **Loads** a value, value of an address, or an address into a register.<br>
-`0 2` PUT = **Stores** the register into memory.<br>
+`0 1` MOV = **Loads** a value, value of an address, or an address into a register. Cannot be used to load values into memory.
+<br>
+
+Usages: <br>
+`MOV RA1 [4]` &nbsp; &nbsp; // Loads the value 4 into the RA1 reguster <br>
+`MOV RA1 4` &nbsp; &nbsp; // Loads the value in memory address 4 <br>
+`MOV RA1 RB1` &nbsp; &nbsp; // Loads the value of RB1 into RA1 <br>
+<br>
+<hr>
+
+`0 2` PUT = **Stores** the register into memory. Cannot be used to store values into registers. 
+<br>
+
+Usages: <br>
+Supposed `RA1` and `RA2` contains the values 70 and 420 respectively. <br>
+
+`PUT 69 RB1` &nbsp; &nbsp; // Stores 420 in memory location 69 <br> 
+`PUT RA1 RA2` &nbsp; &nbsp; // Stores 420 in memory location 70 since RA1 contains the value 70 <br>
+
+<hr>
+
 `0 3` PRN = **Prints** the value of a register in the terminal.<br>
-`0 4` OBL = **OBLITERATES** the contents of a register.<br>
+
+Usages: <br>
+`PRN RA1 0 ` &nbsp; &nbsp; // Prints the value of RA1 into terminal. Ignore 0. <br>
+<hr>
+
+`0 4` OBL = **OBLITERATES** the contents of a register or a memmory location back to `0`.<br>
+
+Usages: <br>
+`OBL 0 RA1` &nbsp; &nbsp; // Resets the contents of RA1 to 0 <br>
+`OBL 0 70` &nbsp; &nbsp; // Deletes the contents in the memory location 70 <br>
+
+<hr>
+
 `1 1` ADD = **Addition** operation.<br>
 `1 2` SUB = **Subtraction** operation.<br>
 `1 3` DIV = **Division** operation.<br>
 `1 4` MUL = **Multiplication** operation.<br>
 `1 5` MOD = **Modulo** operation.<br>
+
+Usage: <br>
+`ADD RA1 [4]` &nbsp; &nbsp; // Adds the 4 to the value of RA1 and stores it in RA1<br>
+`SUB RA1 RA2` &nbsp; &nbsp; // Subtracts the value RA2 to the value of RA1 and stores it in RA1<br>
+`MUL RA2 RA1` &nbsp; &nbsp; // Multiplies the value of RA1 to the value of RA2 and stores it in RA2 <br>
+`DIV RA1 [2]` &nbsp; &nbsp; // Divides the value of RA1 by 2 and stores it in RA1 <br>
+`MOD RA1 [2]` &nbsp; &nbsp; // Get the modulo of RA1 Mod 2 and stores it in RA1 <br>
+
+<hr>
+
 `2 1` GTN = Jump if **Greater than** operation. <br>
 `2 2` LTN = Jump if **Less than** operation. <br>
 `2 3` EQU = Jump if **Equals** operation <br>
@@ -153,4 +195,25 @@ Supposed the 3 numbers are `69`, `420`, `70` and store it in memory location `69
 `PUT 69 RA1` <br>
 `END 0 0` <br>
 
-Result: `186` will be stored in memory location `69` as hexadecimal. (Note, this project is designed not to handle floating point values.)
+Result: `186` will be stored in memory location `69` as hexadecimal. (Note, this project is designed not to handle floating point values.) 
+
+<br>
+
+
+
+### Print the multiplication of 7 up until 70
+
+Prints the multiplication of 7 - 70 and store it in memory location 41 - 50.
+
+<br>
+
+`MOV RA1 [7]` <br>
+`MOV RA2 [41]` <br>
+`MOV RB2 [51]` <br>
+`PUT RA2 RA1` <br>
+`ADD RA1 [7]` <br>
+`ADD RA2 [1]` <br>
+`CMP RA2 RB2` <br>
+`LTN CMP 3` <br>
+`END 0 0`<br>
+
