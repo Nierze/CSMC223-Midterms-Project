@@ -98,7 +98,7 @@ Usage: <br>
 `4 4` END =  **Ends** the program.
 
 ## Memory 
-Values/Instructions stored in memory are stored as a 10 digit Hexadecimal.
+Values/Instructions stored in memory are stored as a 10 digit Hexadecimal. The memory cell can only access memory address 0 - 80 where each cell has 5 bytes. So all in all the memory will have a total of `400 bytes`. A single cell CANNOT contain a value greater than `65,535`.
 
 ![Diagram](./asssets/bitsExplanation.png)
 
