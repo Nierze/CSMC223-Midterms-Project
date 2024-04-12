@@ -6,7 +6,7 @@ using namespace std;
 
 
 int main() {
-    startSystem("input/in2.txt");
+    startSystem("input/in1.txt");
     
     return 0;
 }
