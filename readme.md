@@ -1,8 +1,32 @@
 # Instructions
 
+## How to use
+
+Compile and run main.cpp. In main.cpp, you can change the inputfile to the input file you want.
+Please check the sample instructions down below on how to correctly write instructions for this project.
+
+
 ## Syntax
 
 `<OPERATION> <REGISTER> <VALUE>\<ADDRESS>`
+
+WARNING: There should be no empty spaces between every lines of instructions. <br>
+
+so supposed you have the instructions <br>
+
+`MOV RA1 [69]` <br>
+`MOV RA2 [420]` <br>
+`MOV RA3 [70]` <br>
+`ADD RA1 RA2` <br>
+
+it should not be
+
+`MOV RA1 [69]` <br>
+`MOV RA2 [420]` <br> <br>
+`MOV RA3 [70]` <br>
+`ADD RA1 RA2` <br>
+
+else it will result in an error. <br>
 
 To define a value instead of an address, supposed you want to store the number `69` in memory address `50`, we will use `[]`.
 Example: `PUT 50 [69]`
